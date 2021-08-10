@@ -2,10 +2,27 @@
 const { GraphQLSchema, GraphQLObjectType } = require("graphql");
 
 //import queries
-const { users, user, posts, post, comments, comment, commentsToPost } = require("./queries");
+const {
+  users,
+  user,
+  posts,
+  post,
+  comments,
+  comment,
+  commentsToPost,
+} = require("./queries");
 
 //import mutations
-const { register, login, addPost, addComment } = require("./mutation");
+const {
+  register,
+  login,
+  addPost,
+  addComment,
+  updatePost,
+  deletePost,
+  updateComment,
+  deleteComment,
+} = require("./mutation");
 
 //define QuertType
 const QueryType = new GraphQLObjectType({
@@ -18,7 +35,16 @@ const QueryType = new GraphQLObjectType({
 const MutationType = new GraphQLObjectType({
   name: "MutationType",
   description: "Mutations",
-  fields: { register, login, addPost, addComment },
+  fields: {
+    register,
+    login,
+    addPost,
+    addComment,
+    updatePost,
+    deletePost,
+    updateComment,
+    deleteComment,
+  },
 });
 
 module.exports = new GraphQLSchema({

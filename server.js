@@ -7,7 +7,7 @@ dotenv.config();
 
 const app = express();
 
-const { createJwtToken } = require("./util/auth");
+const { createJwtToken } = require("./util/jwt-auth");
 const { authenticate } = require("./middleware/auth");
 
 app.use(authenticate);
