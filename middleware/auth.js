@@ -5,11 +5,11 @@ const authenticate = async (req, res, next) => {
 
   try {
     const verified = jwt.verify(token, process.env.JWT_SECRET);
-    req.verifiedUser = verified;
-    console.log("Verification success!", verified);
+    req.verifiedUser = verified.user;
+    //console.log("Verification success!", verified);
     next();
   } catch (err) {
-    console.log("Verification failed!");
+    //console.log("Verification failed!");
     next();
   }
 };

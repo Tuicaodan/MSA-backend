@@ -1,12 +1,13 @@
 const { GraphQLString } = require("graphql");
 
-const {} = require("./types");
-const { User } = require("../database-model");
+const { PostType, UserType, CommentType } = require("./types");
+const { User, Post, Comment } = require("../database-model");
 
 const { createJwtToken } = require("../util/auth");
 
 const register = {
   type: GraphQLString,
+  description: "register user",
   args: {
     username: { type: GraphQLString },
     access_token: { type: GraphQLString },
@@ -24,6 +25,7 @@ const register = {
 
 const login = {
   type: GraphQLString,
+  description: "login user",
   args: {
     access_token: { type: GraphQLString },
   },
@@ -38,7 +40,29 @@ const login = {
   },
 };
 
+const addPost = {
+  type: PostType,
+  description: "create a new post",
+  args: {
+    title: { type: GraphQLString },
+    youtube_uri: { type: GraphQLString },
+  },
+  resolve(parent, args, { verifiedUser }) {
+    console.log("Verified User: ", verifiedUser);
+    if (!verifiedUser) {
+      throw new Error("Unauthorized");
+    }
+    const post = new Post({
+      authorId: verifiedUser._id,
+      title: args.title,
+      youtube_uri: args.youtube_uri,
+    });
+    return post.save();
+  },
+};
+
 module.exports = {
   register,
   login,
+  addPost,
 };
