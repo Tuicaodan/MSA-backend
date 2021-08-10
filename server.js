@@ -17,6 +17,15 @@ app.get("/", (req, res) => {
   console.log(req.verifiedUser);
 });
 
+//github login route
+app.get("/login/github", (req, res) => {
+
+})
+
+app.get("/login/github/callback", (req, res) => {
+
+})
+
 //test route for the jwt
 app.get("/authtest", (req, res) => {
   res.json(
