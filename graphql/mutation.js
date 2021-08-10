@@ -48,7 +48,7 @@ const addPost = {
     youtube_uri: { type: GraphQLString },
   },
   resolve(parent, args, { verifiedUser }) {
-    console.log("Verified User: ", verifiedUser);
+    //console.log("Verified User: ", verifiedUser);
     if (!verifiedUser) {
       throw new Error("Unauthorized");
     }
@@ -61,8 +61,29 @@ const addPost = {
   },
 };
 
+const addComment = {
+  type: CommentType,
+  description: "create a new comment on the post",
+  args: {
+    comment: { type: GraphQLString },
+    postId: { type: GraphQLString },
+  },
+  resolve(parent, args, { verifiedUser }) {
+    if (!verifiedUser) {
+      throw new Error("Unauthorized");
+    }
+    const comment = new Comment({
+      userId: verifiedUser._id,
+      postId: args.postId,
+      comment: args.comment,
+    });
+    return comment.save();
+  },
+};
+
 module.exports = {
   register,
   login,
   addPost,
+  addComment,
 };
