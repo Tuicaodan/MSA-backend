@@ -1,22 +1,40 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { graphqlHTTP } = require("express-graphql");
-const schema = require("./graphql/schema")
+const schema = require("./graphql/schema");
 const dotenv = require("dotenv");
-
-
 dotenv.config();
 
 const app = express();
 
+const { createJwtToken } = require("./util/auth");
+const { authenticate } = require("./middleware/auth");
+
+app.use(authenticate);
 app.use(bodyParser.json());
 
-app.get("/", (req, res, next) => {});
+app.get("/", (req, res) => {
+  console.log(req.verifiedUser);
+});
 
-app.use("/graphql", graphqlHTTP({
+//test route for the jwt
+app.get("/authtest", (req, res) => {
+  res.json(
+    createJwtToken({
+      username: "test1",
+      access_token: "123455",
+      avatar_url: "http:goodle.com",
+    })
+  );
+});
+
+app.use(
+  "/graphql",
+  graphqlHTTP({
     schema: schema,
     graphiql: true,
-}))
+  })
+);
 
 //connect database with mongoose
 const mongoose = require("mongoose");
