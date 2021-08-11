@@ -32,8 +32,8 @@ app.get("/login/github/callback", async (req, res) => {
     process.env.GITHUB_CLIENT_ID,
     process.env.GITHUB_CLIENT_SECRET
   );
-  const githubUserdata = await getGithubUser(access_token)
-  console.log(githubUserdata)
+  const githubUserdata = await getGithubUser(access_token);
+  console.log(githubUserdata);
   res.json(githubUserdata);
 });
 
