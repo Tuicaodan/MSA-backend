@@ -4,6 +4,7 @@ const { graphqlHTTP } = require("express-graphql");
 const schema = require("./graphql/schema");
 const dotenv = require("dotenv");
 dotenv.config();
+const fetch = require("node-fetch");
 
 const app = express();
 
@@ -15,6 +16,25 @@ app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
   console.log(req.verifiedUser);
+});
+
+//github login route
+app.get("/login/github", (req, res) => {
+  const redirect_uri = "http://localhost:4000/login/github/callback";
+  const url = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${redirect_uri}`;
+  res.redirect(url);
+});
+
+app.get("/login/github/callback", async (req, res) => {
+  const access_code = req.query.code;
+  const access_token = await getAccessToken(
+    access_code,
+    process.env.GITHUB_CLIENT_ID,
+    process.env.GITHUB_CLIENT_SECRET
+  );
+  const githubUserdata = await getGithubUser(access_token)
+  console.log(githubUserdata)
+  res.json(githubUserdata);
 });
 
 //test route for the jwt
@@ -49,3 +69,30 @@ mongoose
     })
   )
   .catch((err) => console.log(err));
+
+async function getAccessToken(access_code, client_id, client_secret) {
+  const response = await fetch("https://github.com/login/oauth/access_token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      code: access_code,
+      client_id: client_id,
+      client_secret: client_secret,
+    }),
+  });
+  const data = await response.text();
+  const params = new URLSearchParams(data);
+  return params.get("access_token");
+}
+
+async function getGithubUser(access_token) {
+  const response = await fetch("https://api.github.com/user", {
+    headers: {
+      Authorization: `bearer ${access_token}`,
+    },
+  });
+  const data = await response.json();
+  return data;
+}
