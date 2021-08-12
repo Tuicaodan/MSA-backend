@@ -7,13 +7,23 @@ const {
 
 const { User, Post, Comment } = require("../database-model");
 
+// const AuthDataType = new GraphQLObjectType({
+//   name: "AuthData",
+//   description: "Auth data type",
+//   fields: () => ({
+//     jwt_token: { type: GraphQLString },
+//     id: { type: GraphQLID },
+//     username: { type: GraphQLString },
+//     avatar_url: { type: GraphQLString },
+//   })
+// });
+
 const UserType = new GraphQLObjectType({
   name: "User",
   description: "User type",
   fields: () => ({
     id: { type: GraphQLID },
     username: { type: GraphQLString },
-    access_token: { type: GraphQLString },
     avatar_url: { type: GraphQLString },
     post: {
       type: new GraphQLList(PostType),
@@ -71,4 +81,5 @@ module.exports = {
   UserType,
   PostType,
   CommentType,
+  //AuthDataType,
 };

@@ -1,42 +1,57 @@
 const { GraphQLString } = require("graphql");
-
-const { PostType, UserType, CommentType } = require("./types");
+const { PostType, UserType, CommentType, } = require("./types");
 const { User, Post, Comment } = require("../database-model");
-
 const { createJwtToken } = require("../util/jwt-auth");
 
-const register = {
-  type: GraphQLString,
-  description: "register user",
-  args: {
-    username: { type: GraphQLString },
-    access_token: { type: GraphQLString },
-    avatar_url: { type: GraphQLString },
-  },
-  async resolve(parent, args) {
-    const { username, access_token, avatar_url } = args;
-    const user = new User({ username, access_token, avatar_url });
-
-    await user.save();
-    const token = createJwtToken(user);
-    return token;
-  },
-};
+const { getAccessToken, getGithubUser } = require("../util/oauth-functions");
 
 const login = {
   type: GraphQLString,
-  description: "login user",
+  description: "login user, if user not exist, create user",
   args: {
-    access_token: { type: GraphQLString },
+    access_code: { type: GraphQLString },
   },
   async resolve(parent, args) {
-    const user = await User.findOne({ access_token: args.access_token });
-    if (!user) {
-      throw new Error("User is not exist");
+    if (!args.access_code) {
+      throw new Error("Bad access code from github");
     }
 
-    const token = createJwtToken(user);
-    return token;
+    const access_token = await getAccessToken(
+      args.access_code,
+      process.env.GITHUB_CLIENT_ID,
+      process.env.GITHUB_CLIENT_SECRET
+    );
+    if (!access_token) {
+      throw new Error("Bad access token from github");
+    }
+    console.log(access_token);
+
+    const githubUserdata = await getGithubUser(access_token);
+    if (!githubUserdata.login) {
+      throw new Error("Bad access token from github");
+    }
+    const loginUser = {
+      username: githubUserdata.login,
+      avatar_url: githubUserdata.avatar_url,
+    };
+
+    let databaseUser = await User.findOne({ username: loginUser.username });
+    console.log(databaseUser);
+    if (!databaseUser) {
+      console.log("creating user");
+      databaseUser = new User(loginUser);
+      await databaseUser.save();
+    }
+
+    const token = createJwtToken(databaseUser);
+    const AuthData = {
+      jwt_token: token,
+      id: databaseUser._id,
+      username: databaseUser.username,
+      avatar_url: databaseUser.avatar_url,
+    };
+
+    return JSON.stringify(AuthData);
   },
 };
 
@@ -200,7 +215,6 @@ const deleteComment = {
 };
 
 module.exports = {
-  register,
   login,
   addPost,
   addComment,

@@ -14,7 +14,6 @@ const {
 
 //import mutations
 const {
-  register,
   login,
   addPost,
   addComment,
@@ -28,7 +27,15 @@ const {
 const QueryType = new GraphQLObjectType({
   name: "QueryType",
   description: "Queries",
-  fields: { users, user, posts, post, comments, comment, commentsToPost },
+  fields: {
+    users,
+    user,
+    posts,
+    post,
+    comments,
+    comment,
+    commentsToPost,
+    },
 });
 
 //define MutationType
@@ -36,7 +43,6 @@ const MutationType = new GraphQLObjectType({
   name: "MutationType",
   description: "Mutations",
   fields: {
-    register,
     login,
     addPost,
     addComment,

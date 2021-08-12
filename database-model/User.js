@@ -7,11 +7,6 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    access_token: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     avatar_url: {
       type: String,
       required: true,
