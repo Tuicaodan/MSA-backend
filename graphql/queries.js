@@ -2,9 +2,6 @@ const { GraphQLList, GraphQLID } = require("graphql");
 const { UserType, PostType, CommentType } = require("./types");
 const { User, Post, Comment } = require("../database-model");
 
-
-
-
 const users = {
   type: new GraphQLList(UserType),
   description: "Retrieves list of users",
@@ -72,5 +69,5 @@ module.exports = {
   post,
   comments,
   comment,
-  commentsToPost
+  commentsToPost,
 };

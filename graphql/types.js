@@ -7,16 +7,6 @@ const {
 
 const { User, Post, Comment } = require("../database-model");
 
-// const AuthDataType = new GraphQLObjectType({
-//   name: "AuthData",
-//   description: "Auth data type",
-//   fields: () => ({
-//     jwt_token: { type: GraphQLString },
-//     id: { type: GraphQLID },
-//     username: { type: GraphQLString },
-//     avatar_url: { type: GraphQLString },
-//   })
-// });
 
 const UserType = new GraphQLObjectType({
   name: "User",
@@ -41,6 +31,7 @@ const PostType = new GraphQLObjectType({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
     youtube_uri: { type: GraphQLString },
+    description : { type: GraphQLString },
     author: {
       type: UserType,
       resolve(parent, args) {

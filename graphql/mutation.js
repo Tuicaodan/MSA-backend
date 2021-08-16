@@ -5,19 +5,19 @@ const { createJwtToken } = require("../util/jwt-auth");
 
 const { getAccessToken, getGithubUser } = require("../util/oauth-functions");
 
-const login = {
+const userLogin = {
   type: GraphQLString,
   description: "login user, if user not exist, create user",
   args: {
-    access_code: { type: GraphQLString },
+    code: { type: GraphQLString },
   },
   async resolve(parent, args) {
-    if (!args.access_code) {
+    if (!args.code) {
       throw new Error("Bad access code from github");
     }
 
     const access_token = await getAccessToken(
-      args.access_code,
+      args.code,
       process.env.GITHUB_CLIENT_ID,
       process.env.GITHUB_CLIENT_SECRET
     );
@@ -61,6 +61,7 @@ const addPost = {
   args: {
     title: { type: GraphQLString },
     youtube_uri: { type: GraphQLString },
+    description : { type: GraphQLString },
   },
   resolve(parent, args, { verifiedUser }) {
     //console.log("Verified User: ", verifiedUser);
@@ -71,6 +72,7 @@ const addPost = {
       authorId: verifiedUser._id,
       title: args.title,
       youtube_uri: args.youtube_uri,
+      description: args.description,
     });
     return post.save();
   },
@@ -83,6 +85,7 @@ const updatePost = {
     id: { type: GraphQLString },
     title: { type: GraphQLString },
     youtube_uri: { type: GraphQLString },
+    description: { type: GraphQLString },
   },
   async resolve(parent, args, { verifiedUser }) {
     if (!verifiedUser) {
@@ -97,6 +100,7 @@ const updatePost = {
       {
         title: args.title,
         youtube_uri: args.youtube_uri,
+        description: args.description,
       },
       {
         new: true,
@@ -215,7 +219,7 @@ const deleteComment = {
 };
 
 module.exports = {
-  login,
+  userLogin,
   addPost,
   addComment,
   updatePost,

@@ -14,7 +14,7 @@ const {
 
 //import mutations
 const {
-  login,
+  userLogin,
   addPost,
   addComment,
   updatePost,
@@ -43,7 +43,7 @@ const MutationType = new GraphQLObjectType({
   name: "MutationType",
   description: "Mutations",
   fields: {
-    login,
+    userLogin,
     addPost,
     addComment,
     updatePost,
