@@ -14,8 +14,8 @@ const user = {
   type: UserType,
   description: "Retrieves one user",
   args: { id: { type: GraphQLID } },
-  resolve(parent, args) {
-    return User.findById(args.id);
+   resolve(parent, args) {
+    return  User.findById(args.id);
   },
 };
 
@@ -23,7 +23,7 @@ const posts = {
   type: new GraphQLList(PostType),
   description: "Retrieves list of posts",
   resolve(parent, args) {
-    return Post.find();
+    return  Post.find();
   },
 };
 
@@ -31,8 +31,8 @@ const post = {
   type: PostType,
   description: "Retrieves one post",
   args: { id: { type: GraphQLID } },
-  resolve(parent, args) {
-    return Post.findById(args.id);
+  async resolve(parent, args) {
+    return await Post.findById(args.id);
   },
 };
 

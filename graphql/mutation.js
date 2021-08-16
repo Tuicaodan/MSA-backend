@@ -1,5 +1,5 @@
 const { GraphQLString } = require("graphql");
-const { PostType, UserType, CommentType, } = require("./types");
+const { PostType, UserType, CommentType } = require("./types");
 const { User, Post, Comment } = require("../database-model");
 const { createJwtToken } = require("../util/jwt-auth");
 
@@ -24,7 +24,7 @@ const userLogin = {
     if (!access_token) {
       throw new Error("Bad access token from github");
     }
-    console.log(access_token);
+    //console.log(access_token);
 
     const githubUserdata = await getGithubUser(access_token);
     if (!githubUserdata.login) {
@@ -36,7 +36,7 @@ const userLogin = {
     };
 
     let databaseUser = await User.findOne({ username: loginUser.username });
-    console.log(databaseUser);
+    //console.log(databaseUser);
     if (!databaseUser) {
       console.log("creating user");
       databaseUser = new User(loginUser);
@@ -61,7 +61,7 @@ const addPost = {
   args: {
     title: { type: GraphQLString },
     youtube_uri: { type: GraphQLString },
-    description : { type: GraphQLString },
+    description: { type: GraphQLString },
   },
   resolve(parent, args, { verifiedUser }) {
     //console.log("Verified User: ", verifiedUser);
@@ -74,7 +74,17 @@ const addPost = {
       youtube_uri: args.youtube_uri,
       description: args.description,
     });
-    return post.save();
+
+    return post
+      .save()
+      .then((result) => {
+        console.log(result);
+        return { ...result._doc };
+      })
+      .catch((err) => {
+        console.log("Adding post error");
+        throw err;
+      });
   },
 };
 
@@ -156,7 +166,17 @@ const addComment = {
       postId: args.postId,
       comment: args.comment,
     });
-    return comment.save();
+    return comment
+      .save()
+      .then((result) => {
+        console.log(result);
+        return { ...result._doc };
+      })
+      .catch((err) => {
+        console.log("Adding comment error");
+        throw err;
+      });
+
   },
 };
 
