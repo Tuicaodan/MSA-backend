@@ -32,6 +32,7 @@ const PostType = new GraphQLObjectType({
     title: { type: GraphQLString },
     youtube_uri: { type: GraphQLString },
     description : { type: GraphQLString },
+    createdAt: { type: GraphQLString },
     author: {
       type: UserType,
       resolve(parent, args) {
@@ -53,6 +54,7 @@ const CommentType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     comment: { type: GraphQLString },
+    createdAt: { type: GraphQLString },
     user: {
       type: UserType,
       resolve(parent, args) {
