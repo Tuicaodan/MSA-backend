@@ -17,7 +17,9 @@ const UserType = new GraphQLObjectType({
     post: {
       type: new GraphQLList(PostType),
       resolve(parent, args, context) {
-        return Post.find({ authorId: parent.id });
+        const { loaders } = context;
+        const { postsDataLoader } = loaders;
+        return postsDataLoader.load(parent.id);
       },
     },
   }),

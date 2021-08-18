@@ -7,7 +7,7 @@ const cors = require("cors");
 dotenv.config();
 const app = express();
 const { authenticate } = require("./middleware/auth");
-const { commentsDataLoader, usersDataLoader } = require("./graphql/dataloader");
+const { commentsDataLoader, usersDataLoader, postsDataLoader } = require("./graphql/dataloader");
 
 //allow cross-origin requests
 app.use(cors());
@@ -28,6 +28,7 @@ app.use(
       loaders: {
         commentsDataLoader: commentsDataLoader(),
         usersDataLoader: usersDataLoader(),
+        postsDataLoader: postsDataLoader(),
       },
     },
   })

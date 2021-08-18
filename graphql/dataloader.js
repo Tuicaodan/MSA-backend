@@ -19,12 +19,33 @@ const commentsByPostIds = async (postIds) => {
 //the posts to users dataloader
 const usersDataLoader = () => new DataLoader(usersByUserIds);
 const usersByUserIds = async (userIds) => {
-  const users = await User.find({ _id: { $in: userIds } });
+  let users;
+  try {
+    users = await User.find({ _id: { $in: userIds } });
+  } catch (err) {
+    throw new Error("dataloader usersByUserIds error");
+  }
+
   const groupById = groupBy((user) => user._id, users);
+  return map((userId) => groupById[userId], userIds);
+};
+
+//the posts dataloader
+const postsDataLoader = () => new DataLoader(postsByUserIds);
+const postsByUserIds = async (userIds) => {
+  let posts;
+  try {
+    posts = await Post.find({ authorId: { $in: userIds } });
+  } catch (err) {
+    throw new Error("dataloader usersByUserIds error");
+  }
+
+  const groupById = groupBy((post) => post.authorId, posts);
   return map((userId) => groupById[userId], userIds);
 };
 
 module.exports = {
   commentsDataLoader,
   usersDataLoader,
+  postsDataLoader
 };
