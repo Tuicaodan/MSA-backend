@@ -30,7 +30,7 @@ const PostType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
-    youtube_uri: { type: GraphQLString },
+    youtube_url: { type: GraphQLString },
     description : { type: GraphQLString },
     createdAt: { type: GraphQLString },
     author: {

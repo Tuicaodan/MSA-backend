@@ -11,7 +11,7 @@ const postSchema = new Schema(
       type: String,
       required: true,
     },
-    youtube_uri: {
+    youtube_url: {
       type: String,
       required: true,
     },

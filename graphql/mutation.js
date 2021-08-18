@@ -60,10 +60,10 @@ const addPost = {
   description: "create a new post",
   args: {
     title: { type: GraphQLString },
-    youtube_uri: { type: GraphQLString },
+    youtube_url: { type: GraphQLString },
     description: { type: GraphQLString },
   },
-  resolve(parent, args, { verifiedUser }) {
+  async resolve(parent, args, { verifiedUser }) {
     //console.log("Verified User: ", verifiedUser);
     if (!verifiedUser) {
       throw new Error("Unauthenticated");
@@ -71,20 +71,28 @@ const addPost = {
     const post = new Post({
       authorId: verifiedUser._id,
       title: args.title,
-      youtube_uri: args.youtube_uri,
+      youtube_url: args.youtube_url,
       description: args.description,
     });
-
-    return post
-      .save()
-      .then((result) => {
-        console.log(result);
-        return { ...result._doc };
-      })
-      .catch((err) => {
-        console.log("Adding post error");
-        throw err;
-      });
+    try{
+      const result = await post.save()
+      //console.log(result);
+      return result;
+    }catch(err){
+      console.log("Adding post error in server: "+ err);
+      throw new Error(err)
+    }
+    
+    // return post
+    //   .save()
+    //   .then((result) => {
+    //     console.log(result);
+    //     return { ...result._doc };
+    //   })
+    //   .catch((err) => {
+    //     console.log("Adding post error");
+    //     throw err;
+    //   });
   },
 };
 
@@ -94,7 +102,7 @@ const updatePost = {
   args: {
     id: { type: GraphQLString },
     title: { type: GraphQLString },
-    youtube_uri: { type: GraphQLString },
+    youtube_url: { type: GraphQLString },
     description: { type: GraphQLString },
   },
   async resolve(parent, args, { verifiedUser }) {
@@ -109,7 +117,7 @@ const updatePost = {
       },
       {
         title: args.title,
-        youtube_uri: args.youtube_uri,
+        youtube_url: args.youtube_url,
         description: args.description,
       },
       {
@@ -176,7 +184,6 @@ const addComment = {
         console.log("Adding comment error");
         throw err;
       });
-
   },
 };
 
