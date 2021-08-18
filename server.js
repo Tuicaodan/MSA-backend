@@ -7,10 +7,10 @@ const cors = require("cors");
 dotenv.config();
 const app = express();
 const { authenticate } = require("./middleware/auth");
-
+const { commentsDataLoader, usersDataLoader } = require("./graphql/dataloader");
 
 //allow cross-origin requests
-app.use(cors())
+app.use(cors());
 
 app.use(authenticate);
 app.use(bodyParser.json());
@@ -19,12 +19,17 @@ app.use(bodyParser.json());
 //   console.log(req.verifiedUser);
 // });
 
-
 app.use(
   "/graphql",
   graphqlHTTP({
     schema: schema,
     graphiql: true,
+    context: {
+      loaders: {
+        commentsDataLoader: commentsDataLoader(),
+        usersDataLoader: usersDataLoader(),
+      },
+    },
   })
 );
 

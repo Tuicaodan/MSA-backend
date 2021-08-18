@@ -7,7 +7,6 @@ const {
 
 const { User, Post, Comment } = require("../database-model");
 
-
 const UserType = new GraphQLObjectType({
   name: "User",
   description: "User type",
@@ -17,7 +16,7 @@ const UserType = new GraphQLObjectType({
     avatar_url: { type: GraphQLString },
     post: {
       type: new GraphQLList(PostType),
-      resolve(parent, args) {
+      resolve(parent, args, context) {
         return Post.find({ authorId: parent.id });
       },
     },
@@ -31,18 +30,22 @@ const PostType = new GraphQLObjectType({
     id: { type: GraphQLID },
     title: { type: GraphQLString },
     youtube_url: { type: GraphQLString },
-    description : { type: GraphQLString },
+    description: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     author: {
-      type: UserType,
-      resolve(parent, args) {
-        return User.findById(parent.authorId);
+      type: new GraphQLList(UserType),
+      resolve(parent, args, context) {
+        const { loaders } = context;
+        const { usersDataLoader } = loaders;
+        return usersDataLoader.load(parent.authorId);
       },
     },
     comments: {
       type: new GraphQLList(CommentType),
-      resolve(parent, args) {
-        return Comment.find({ postId: parent.id });
+      resolve(parent, args, context) {
+        const { loaders } = context;
+        const { commentsDataLoader } = loaders;
+        return commentsDataLoader.load(parent.id);
       },
     },
   }),

@@ -23,7 +23,7 @@ const posts = {
   type: new GraphQLList(PostType),
   description: "Retrieves list of posts",
   async resolve(parent, args) {
-    return await Post.find().sort({ createdAt: -1 });
+    return Post.find().sort({ createdAt: -1 });
   },
 };
 
