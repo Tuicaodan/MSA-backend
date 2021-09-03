@@ -7,7 +7,11 @@ const cors = require("cors");
 dotenv.config();
 const app = express();
 const { authenticate } = require("./middleware/auth");
-const { commentsDataLoader, usersDataLoader, postsDataLoader } = require("./graphql/dataloader");
+const {
+  commentsDataLoader,
+  usersDataLoader,
+  postsDataLoader,
+} = require("./graphql/dataloader");
 
 //allow cross-origin requests
 app.use(cors());
@@ -21,7 +25,7 @@ app.use(bodyParser.json());
 
 app.use(
   "/graphql",
-  graphqlHTTP({
+  graphqlHTTP((req) => ({
     schema: schema,
     graphiql: true,
     context: {
@@ -30,8 +34,9 @@ app.use(
         usersDataLoader: usersDataLoader(),
         postsDataLoader: postsDataLoader(),
       },
+      verifiedUser: req.verifiedUser,
     },
-  })
+  }))
 );
 
 //connect database with mongoose

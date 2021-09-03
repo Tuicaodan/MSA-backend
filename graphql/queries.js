@@ -15,15 +15,10 @@ const user = {
   description: "Retrieves one user",
   args: { id: { type: GraphQLID } },
   async resolve(parent, args) {
+    // console.log(args)
+    // console.log(args.id)
+    // console.log(typeof(args.id))
     return await User.findById(args.id);
-  },
-};
-
-const posts = {
-  type: new GraphQLList(PostType),
-  description: "Retrieves list of posts",
-  async resolve(parent, args) {
-    return Post.find().sort({ createdAt: -1 });
   },
 };
 
@@ -32,9 +27,21 @@ const post = {
   description: "Retrieves one post",
   args: { id: { type: GraphQLID } },
   async resolve(parent, args) {
+    // console.log(args)
+    // console.log(args.id)
+    // console.log(typeof(args.id))
     return await Post.findById(args.id);
   },
 };
+
+const posts = {
+  type: new GraphQLList(PostType),
+  description: "Retrieves list of posts",
+  async resolve(parent, args) {
+    return await Post.find().sort({ createdAt: -1 });
+  },
+};
+
 
 const commentsToPost = {
   type: new GraphQLList(CommentType),

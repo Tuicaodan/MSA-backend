@@ -64,7 +64,8 @@ const addPost = {
     description: { type: GraphQLString },
   },
   async resolve(parent, args, { verifiedUser }) {
-    //console.log("Verified User: ", verifiedUser);
+    console.log("in the mutation addPost")
+    console.log("Verified User: ", verifiedUser);
     if (!verifiedUser) {
       throw new Error("Unauthenticated");
     }
