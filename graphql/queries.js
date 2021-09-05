@@ -22,6 +22,22 @@ const user = {
   },
 };
 
+const loginedUser = {
+  type: UserType,
+  description: "Retrieves logined user",
+  async resolve(parent, args, { verifiedUser }) {
+    if (!verifiedUser) {
+      throw new Error("User not login");
+    }
+    try {
+      return await User.findById(verifiedUser._id);
+    } catch (err) {
+      console.log("Retrieves logined user error in server: " + err);
+      throw new Error(err);
+    }
+  },
+};
+
 const post = {
   type: PostType,
   description: "Retrieves one post",
@@ -41,7 +57,6 @@ const posts = {
     return await Post.find().sort({ createdAt: -1 });
   },
 };
-
 
 const commentsToPost = {
   type: new GraphQLList(CommentType),
@@ -72,6 +87,7 @@ const comments = {
 module.exports = {
   users,
   user,
+  loginedUser,
   posts,
   post,
   comments,
