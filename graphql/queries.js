@@ -46,6 +46,7 @@ const post = {
     // console.log(args)
     // console.log(args.id)
     // console.log(typeof(args.id))
+    console.log(args.id);
     return await Post.findById(args.id);
   },
 };
