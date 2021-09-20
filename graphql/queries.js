@@ -16,8 +16,8 @@ const user = {
   args: { id: { type: GraphQLID } },
   async resolve(parent, args) {
     // console.log(args)
-    // console.log(args.id)
-    // console.log(typeof(args.id))
+    console.log(args.id);
+    //console.log(typeof args.id);
     return await User.findById(args.id);
   },
 };

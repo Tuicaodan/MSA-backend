@@ -47,5 +47,5 @@ const postsByUserIds = async (userIds) => {
 module.exports = {
   commentsDataLoader,
   usersDataLoader,
-  postsDataLoader
+  postsDataLoader,
 };
