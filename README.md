@@ -9,7 +9,7 @@
 - [Features](#features)
 - [Screenshots](#screenshots)
 - [Setup](#setup)
-- [How to use](#How to use)
+- [How to use](#how-to-use)
 
 ## General Information
 
@@ -59,6 +59,7 @@ You need to provide your own .env file which should includes:
 You can use GraphiQL interface by this address:
 http://localhost:port/graphql
 
+
 ## How to use
 
 The mutations and queries are shown below.
@@ -70,3 +71,4 @@ The mutations and queries are shown below.
   ![GraphiQL](./screenshot/mutations.png)
 
 You can use the queries to fetch data from the database. However, the mutations are required further authentication. Otherwise, an authentication warning will be shown.
+
