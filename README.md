@@ -50,7 +50,7 @@ You need to provide your own .env file which should includes:
 
 - PORT =a port number
 - MONGO_URI =the URI to link with MongoDB
-  if you also want to use the Github OAuth feature, you need provide these information as well:
+  if you also want to use the Github OAuth feature, you need to provide this information as well:
 - JWT_SECRET =your own jwt secret
 - GITHUB_APP_ID=your own GITHUB_APP_ID
 - GITHUB_CLIENT_ID=your own GITHUB_CLIENT_ID
@@ -60,13 +60,5 @@ You can use GraphiQL interface by this address:
 http://localhost:port/graphql
 
 ## How to use
-
-The mutations and queries are shown below.
-
-- Queries: <br />
-  ![GraphiQL](./screenshot/queries.png)
-
-- Mutations: <br />
-  ![GraphiQL](./screenshot/mutations.png)
 
 You can use the queries to fetch data from the database. However, the mutations are required further authentication. Otherwise, an authentication warning will be shown.
