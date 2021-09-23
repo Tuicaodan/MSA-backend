@@ -1,6 +1,7 @@
 # GraphQL API endpoint for a React web app
 
-> This is a practice project to apply the combinations of GraphQL, MongoDB and DataLoader.
+> - This is a practice project to apply the combinations of GraphQL, MongoDB and DataLoader.
+> - You can find a live demo [_here_](https://youtagram-api.azurewebsites.net/graphql).
 
 ## Table of Contents
 
